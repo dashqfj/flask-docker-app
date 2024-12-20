@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  test:
+    build: .
+    command: sh -c "/wait-for-it.sh db && pytest -v"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=testing
+      - REDIS_HOST=redis
+      - PYTHONUNBUFFERED=1
+      - POSTGRES_PASSWORD=password
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: flask_db_test
+    ports:
+      - "5434:5432"
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379" 
