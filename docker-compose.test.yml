@@ -3,7 +3,7 @@ version: '3'
 services:
   test:
     build: .
-    command: pytest -v
+    command: sh -c "/wait-for-it.sh db && pytest -v"
     environment:
       - FLASK_APP=app.py
       - FLASK_ENV=testing
